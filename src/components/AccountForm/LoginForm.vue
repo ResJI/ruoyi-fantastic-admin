@@ -54,11 +54,11 @@ const onSubmit = form.handleSubmit((values) => {
   })
 })
 
-function testAccount(account: string) {
-  form.setFieldValue('account', account)
-  form.setFieldValue('password', '123456')
-  onSubmit()
-}
+// function testAccount(account: string) {
+//   form.setFieldValue('account', account)
+//   form.setFieldValue('password', '123456')
+//   onSubmit()
+// }
 </script>
 
 <template>
@@ -71,14 +71,14 @@ function testAccount(account: string) {
         {{ title }}
       </p>
     </div>
-    <div class="mb-4">
-      <FaTabs
-        v-model="type" :list="[
-          { label: '账号密码登录', value: 'default' },
-          { label: '扫码登录', value: 'qrcode' },
-        ]" class="inline-flex"
-      />
-    </div>
+    <!--    <div class="mb-4"> -->
+    <!--      <FaTabs -->
+    <!--        v-model="type" :list="[ -->
+    <!--          { label: '账号密码登录', value: 'default' }, -->
+    <!--          { label: '扫码登录', value: 'qrcode' }, -->
+    <!--        ]" class="inline-flex" -->
+    <!--      /> -->
+    <!--    </div> -->
     <div v-show="type === 'default'">
       <form @submit="onSubmit">
         <FormField v-slot="{ componentField, errors }" name="account">
@@ -113,39 +113,39 @@ function testAccount(account: string) {
               </FormItem>
             </FormField>
           </div>
-          <FaButton variant="link" class="h-auto p-0" type="button" @click="emits('onResetPassword', form.values.account)">
-            忘记密码了?
-          </FaButton>
+          <!--          <FaButton variant="link" class="h-auto p-0" type="button" @click="emits('onResetPassword', form.values.account)"> -->
+          <!--            忘记密码了? -->
+          <!--          </FaButton> -->
         </div>
         <FaButton :loading="loading" size="lg" class="w-full" type="submit">
           登录
         </FaButton>
-        <div class="mt-4 flex-center gap-2 text-sm">
-          <span class="text-secondary-foreground op-50">还没有帐号?</span>
-          <FaButton variant="link" class="h-auto p-0" type="button" @click="emits('onRegister', form.values.account)">
-            注册新帐号
-          </FaButton>
-        </div>
+        <!--        <div class="mt-4 flex-center gap-2 text-sm"> -->
+        <!--          <span class="text-secondary-foreground op-50">还没有帐号?</span> -->
+        <!--          <FaButton variant="link" class="h-auto p-0" type="button" @click="emits('onRegister', form.values.account)"> -->
+        <!--            注册新帐号 -->
+        <!--          </FaButton> -->
+        <!--        </div> -->
       </form>
-      <div class="mt-4 text-center -mb-4">
-        <FaDivider>演示账号一键登录</FaDivider>
-        <div class="space-x-2">
-          <FaButton variant="default" size="sm" plain @click="testAccount('admin')">
-            admin
-          </FaButton>
-          <FaButton variant="outline" size="sm" plain @click="testAccount('test')">
-            test
-          </FaButton>
-        </div>
-      </div>
+      <!--      <div class="mt-4 text-center -mb-4"> -->
+      <!--        <FaDivider>演示账号一键登录</FaDivider> -->
+      <!--        <div class="space-x-2"> -->
+      <!--          <FaButton variant="default" size="sm" plain @click="testAccount('admin')"> -->
+      <!--            admin -->
+      <!--          </FaButton> -->
+      <!--          <FaButton variant="outline" size="sm" plain @click="testAccount('test')"> -->
+      <!--            test -->
+      <!--          </FaButton> -->
+      <!--        </div> -->
+      <!--      </div> -->
     </div>
-    <div v-show="type === 'qrcode'">
-      <div class="flex-col-center">
-        <img src="https://s2.loli.net/2024/04/26/GsahtuIZ9XOg5jr.png" class="h-[250px] w-[250px]">
-        <div class="mt-2 text-sm text-secondary-foreground op-50">
-          请使用微信扫码登录
-        </div>
-      </div>
-    </div>
+    <!--    <div v-show="type === 'qrcode'"> -->
+    <!--      <div class="flex-col-center"> -->
+    <!--        <img src="https://s2.loli.net/2024/04/26/GsahtuIZ9XOg5jr.png" class="h-[250px] w-[250px]"> -->
+    <!--        <div class="mt-2 text-sm text-secondary-foreground op-50"> -->
+    <!--          请使用微信扫码登录 -->
+    <!--        </div> -->
+    <!--      </div> -->
+    <!--    </div> -->
   </div>
 </template>
