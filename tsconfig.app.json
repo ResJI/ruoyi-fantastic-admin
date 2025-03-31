@@ -15,7 +15,7 @@
       "vite-plugin-app-loading/client",
       "element-plus/global"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,

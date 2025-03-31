@@ -94,6 +94,7 @@
     "boxen": "^8.0.1",
     "eslint": "^9.23.0",
     "esno": "^4.8.0",
+    "file-saver": "^2.0.5",
     "fs-extra": "^11.3.0",
     "http-server": "^14.1.1",
     "inquirer": "^12.5.0",

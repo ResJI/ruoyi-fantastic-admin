@@ -15,6 +15,7 @@ import MockExample from './modules/mock.example'
 import MultilevelMenuExample from './modules/multilevel.menu.example'
 import PermissionExample from './modules/permission.example'
 import PluginExample from './modules/plugin.example'
+import systemMenu from './modules/systemMenu'
 import TabExample from './modules/tab.example'
 
 // 固定路由（默认路由）
@@ -98,6 +99,15 @@ const asyncRoutes: Route.recordMainRaw[] = [
     },
     children: [
       ...EcologyExample,
+    ],
+  },
+  {
+    meta: {
+      title: '系统',
+      icon: 'i-iconoir:ios-settings',
+    },
+    children: [
+      ...systemMenu,
     ],
   },
 ]
