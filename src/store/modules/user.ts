@@ -14,16 +14,21 @@ const useUserStore = defineStore(
     const menuStore = useMenuStore()
     const tabbarStore = useTabbarStore()
 
-    const account = ref(localStorage.account ?? '')
+    const localUserInfo = localStorage.userInfo ? JSON.parse(localStorage.userInfo) : {}
+
     const token = ref(localStorage.token ?? '')
-    const avatar = ref(localStorage.avatar ?? '')
+    const account = ref(localUserInfo.account ?? '')
+    const avatar = ref(localUserInfo.avatar ?? '')
     const permissions = ref<string[]>([])
-    const isLogin = computed(() => {
-      if (token.value) {
-        return true
-      }
-      return false
-    })
+    const id = ref(localUserInfo.id ?? null)
+    const nickName = ref(localUserInfo.nickName ?? '')
+    const phoneNumber = ref(localUserInfo.phoneNumber ?? '')
+    const email = ref(localUserInfo.email ?? '')
+    const sex = ref(localUserInfo.sex ?? '')
+    const userId = ref(localUserInfo.userId ?? null)
+    const deptId = ref(localUserInfo.deptId ?? null)
+    const roles = ref<string[]>([])
+    const isLogin = computed(() => !!token.value)
 
     // 登录
     async function login(data: {
@@ -31,12 +36,29 @@ const useUserStore = defineStore(
       password: string
     }) {
       const res = await apiUser.login(data)
-      localStorage.setItem('account', res.data.account)
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('avatar', res.data.avatar)
-      account.value = res.data.account
-      token.value = res.data.token
-      avatar.value = res.data.avatar
+      localStorage.setItem('token', res.token)
+      token.value = res.token
+      const userInfo = await apiUser.getInfo()
+      id.value = userInfo.user.userId
+      account.value = data.account
+      nickName.value = userInfo.user.nickName
+      avatar.value = userInfo.user.avatar !== '' ? import.meta.env.VITE_APP_BASE_API + userInfo.user.avatar : ''
+      phoneNumber.value = userInfo.user.phonenumber
+      email.value = userInfo.user.email
+      sex.value = userInfo.user.sex
+      deptId.value = userInfo.user.deptId
+      userId.value = userInfo.user.userId
+      localStorage.setItem('userInfo', JSON.stringify({
+        id: id.value,
+        account: account.value,
+        nickName: nickName.value,
+        avatar: avatar.value,
+        phoneNumber: phoneNumber.value,
+        email: email.value,
+        sex: sex.value,
+        deptId: deptId.value,
+        userId: userId.value,
+      }))
     }
 
     // 手动登出
@@ -85,7 +107,8 @@ const useUserStore = defineStore(
     // 获取权限
     async function getPermissions() {
       const res = await apiUser.permission()
-      permissions.value = res.data.permissions
+      permissions.value = res.permissions
+      roles.value = res.roles
     }
     // 修改密码
     async function editPassword(data: {
@@ -96,6 +119,13 @@ const useUserStore = defineStore(
     }
 
     return {
+      id,
+      nickName,
+      phoneNumber,
+      email,
+      sex,
+      deptId,
+      userId,
       account,
       token,
       avatar,

@@ -7,8 +7,6 @@ meta:
 
 <script setup lang="ts">
 import LoginForm from '@/components/AccountForm/LoginForm.vue'
-import RegisterForm from '@/components/AccountForm/RegisterForm.vue'
-import ResetPasswordForm from '@/components/AccountForm/ResetPasswordForm.vue'
 import ColorScheme from '@/layouts/components/Topbar/Toolbar/ColorScheme/index.vue'
 import useSettingsStore from '@/store/modules/settings'
 
@@ -45,18 +43,18 @@ const formType = ref<'login' | 'register' | 'resetPassword'>('login')
           @on-register="(val) => { formType = 'register'; account = val }"
           @on-reset-password="(val) => { formType = 'resetPassword'; account = val }"
         />
-        <RegisterForm
-          v-else-if="formType === 'register'"
-          :account
-          @on-register="(val) => { formType = 'login'; account = val }"
-          @on-login="formType = 'login'"
-        />
-        <ResetPasswordForm
-          v-else-if="formType === 'resetPassword'"
-          :account
-          @on-reset-password="(val) => { formType = 'login'; account = val }"
-          @on-login="formType = 'login'"
-        />
+        <!--        <RegisterForm -->
+        <!--          v-else-if="formType === 'register'" -->
+        <!--          :account -->
+        <!--          @on-register="(val) => { formType = 'login'; account = val }" -->
+        <!--          @on-login="formType = 'login'" -->
+        <!--        /> -->
+        <!--        <ResetPasswordForm -->
+        <!--          v-else-if="formType === 'resetPassword'" -->
+        <!--          :account -->
+        <!--          @on-reset-password="(val) => { formType = 'login'; account = val }" -->
+        <!--          @on-login="formType = 'login'" -->
+        <!--        /> -->
       </Transition>
     </div>
   </div>

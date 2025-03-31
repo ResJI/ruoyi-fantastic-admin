@@ -160,6 +160,9 @@ const useMenuStore = defineStore(
       let isAuth = false
       if (menu.meta?.auth) {
         isAuth = permissions.some((auth) => {
+          if (auth === '*:*:*') {
+            return true
+          }
           if (typeof menu.meta?.auth === 'string') {
             return menu.meta.auth !== '' ? menu.meta.auth === auth : true
           }
