@@ -1,73 +1,106 @@
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import useUserStore from '@/store/modules/user'
 import axios from 'axios'
-// import qs from 'qs'
-import { toast } from 'vue-sonner'
+import { ElMessage, ElNotification } from 'element-plus'
+import qs from 'qs'
 
 const api = axios.create({
-  baseURL: (import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY) ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
+  baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 1000 * 60,
-  responseType: 'json',
 })
 
-api.interceptors.request.use(
-  (request) => {
-    // 全局拦截请求发送前提交的参数
-    const userStore = useUserStore()
-    // 设置请求头
-    if (request.headers) {
-      if (userStore.isLogin) {
-        request.headers.Token = userStore.token
+function removeEmptyData(data: any) {
+  data = data ?? null
+  if (data !== null && typeof data === 'object') {
+    for (const key in data) {
+      if ([undefined, null, ''].includes(data[key])) {
+        delete data[key]
       }
     }
-    // 是否将 POST 请求参数进行字符串化处理
-    if (request.method === 'post') {
-      // request.data = qs.stringify(request.data, {
-      //   arrayFormat: 'brackets',
-      // })
+    if (data.length === 0) {
+      return null
+    }
+  }
+  return data
+}
+
+type MyInternalAxiosRequestConfig = InternalAxiosRequestConfig & {
+  __noMessage: boolean
+  __withHeaders: boolean
+}
+api.interceptors.request.use(
+  (_request) => {
+    const request = _request as MyInternalAxiosRequestConfig
+    request.__noMessage = request.headers.__noMessage === 'true'
+    request.__withHeaders = request.headers.__withHeaders === 'true'
+    delete request.headers.__noMessage
+    delete request.headers.__withHeaders
+    const userStore = useUserStore()
+    userStore.isLogin && (request.headers.authorization = `Bearer ${userStore.token}`)
+    request.params = removeEmptyData(request.params)
+    if (request.method === 'get') {
+      if (request.params !== null && typeof request.params === 'object') {
+        request.url = `${request.url}?${qs.stringify(request.params)}`
+        request.params = {}
+      }
     }
     return request
   },
 )
 
+const errorCode: { [index: keyof any]: string } = {
+  401: '认证失败，无法访问系统资源',
+  403: '当前操作没有权限',
+  404: '访问资源不存在',
+  default: '系统未知错误，请反馈给管理员',
+}
 api.interceptors.response.use(
-  (response) => {
-    /**
-     * 全局拦截请求发送后返回的数据，如果数据有报错则在这做全局的错误提示
-     * 假设返回数据格式为：{ status: 1, error: '', data: {} }
-     * 规则是当 status 为 1 时表示请求成功，为 0 时表示接口需要登录或者登录状态失效，需要重新登录
-     * 请求出错时 error 会返回错误信息
-     */
-    if (response.data.status === 1) {
-      if (response.data.error !== '') {
-        toast.warning('Warning', {
-          description: response.data.error,
-        })
-        return Promise.reject(response.data)
+  async (_res) => {
+    const res = _res as AxiosResponse & {
+      config: InternalAxiosRequestConfig & {
+        __noMessage: boolean
+        __withHeaders: boolean
       }
     }
-    else {
-      useUserStore().requestLogout()
+    // 未设置状态码则默认成功状态
+    const code = res.data.code || 200
+    if (code === 200) {
+      if (res.config.__withHeaders) {
+        return res
+      }
+      else {
+        return res.data
+      }
     }
-    return Promise.resolve(response.data)
+    // 获取错误信息
+    const msg = errorCode[code] || res.data.msg || errorCode.default
+    switch (code) {
+      case 401:
+        await useUserStore().logout()
+        return
+      case 500:
+        !res.config.__noMessage && ElMessage({ message: msg, type: 'error' })
+        return Promise.reject(new Error(msg))
+      case 601:
+        !res.config.__noMessage && ElMessage({ message: msg, type: 'warning' })
+        return Promise.reject(new Error(msg))
+      default:
+        !res.config.__noMessage && ElNotification.error({ title: msg })
+        return Promise.reject(new Error('error'))
+    }
   },
   (error) => {
-    if (error.status === 401) {
-      useUserStore().requestLogout()
-      throw error
+    let message = ''
+    if (error.response) {
+      message = `系统接口${error.response.status}异常`
     }
-    let message = error.message
-    if (message === 'Network Error') {
-      message = '后端网络故障'
+    else if (error.request) {
+      message = error.code === 'ERR_NETWORK' ? '后端接口连接异常' : '系统接口请求超时'
     }
-    else if (message.includes('timeout')) {
-      message = '接口请求超时'
+    else {
+      message = '请求异常'
     }
-    else if (message.includes('Request failed with status code')) {
-      message = `接口${message.substr(message.length - 3)}异常`
-    }
-    toast.error('Error', {
-      description: message,
-    })
+    ElMessage({ message, type: 'error', duration: 5 * 1000 })
     return Promise.reject(error)
   },
 )
