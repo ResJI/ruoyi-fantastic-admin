@@ -37,6 +37,9 @@ const globalSettings: Settings.all = {
     company: 'Fantastic-admin',
     website: 'https://fantastic-admin.hurui.me',
   },
+  home: {
+    enable: false,
+  },
 }
 
 export default merge(globalSettings, cloneDeep(settingsDefault)) as RecursiveRequired<Settings.all>
