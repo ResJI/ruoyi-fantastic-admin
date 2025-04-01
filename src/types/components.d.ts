@@ -23,7 +23,6 @@ declare module 'vue' {
     FaIcon: typeof import('./../ui/components/FaIcon/index.vue')['default']
     FaInput: typeof import('./../ui/components/FaInput/index.vue')['default']
     FaKbd: typeof import('./../ui/components/FaKbd/index.vue')['default']
-    FaMaskScrollContainer: typeof import('./../ui/components/FaMaskScrollContainer/index.vue')['default']
     FaModal: typeof import('./../ui/components/FaModal/index.vue')['default']
     FaNotAllowed: typeof import('./../ui/components/FaNotAllowed/index.vue')['default']
     FaNotification: typeof import('./../ui/components/FaNotification/index.vue')['default']
