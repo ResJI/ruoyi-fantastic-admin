@@ -30,16 +30,6 @@ export default defineConfig(({ mode, command }) => {
         },
         '/dev-api': {
           target: 'http://192.168.33.238:8088/', // 调试服务器
-          // target: 'http://192.168.83.199:8088/',
-          // target: 'http://192.168.33.146:8088/', // 朱润光
-          // target: 'http://192.168.33.152:8088/', // 最强中年
-          // target: 'http://192.168.33.46:8088', // 董克冰
-          // target: 'http://192.168.177.25:8088/', // 杨永利
-          // target: 'http://192.168.33.45:8088/', // 闫超
-          // target: 'http://192.168.18.179:8088/', // 闫超(笔记本)
-          // target: 'http://192.168.33.95:8088/', // 宝雨
-          // target: 'http://192.168.33.114:8088/', // 李孟昊
-          // target: 'http://192.168.33.197:8088/', // 海洋
           changeOrigin: true,
           rewrite: p => p.replace(/^\/dev-api/, ''),
         },
