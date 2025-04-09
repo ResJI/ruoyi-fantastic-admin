@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EditPasswordForm from '@/components/AccountForm/EditPasswordForm.vue'
+import BaseInfo from './BaseInfo.vue'
 
 const active = ref(0)
 const tabs = ref([
@@ -15,7 +16,7 @@ const tabs = ref([
 </script>
 
 <template>
-  <div class="min-h-full w-full">
+  <div class="h-full w-full">
     <div class="fixed inset-s-0 bottom-0 top-0 h-full w-40 border-e">
       <div v-for="(tab, index) in tabs" :key="index" class="cursor-pointer px-4 py-3 transition-background-color space-y-2 hover-bg-accent/50" :class="{ 'bg-accent hover-bg-accent!': active === index }" @click="active = index">
         <div class="text-base text-accent-foreground leading-tight">
@@ -26,10 +27,8 @@ const tabs = ref([
         </div>
       </div>
     </div>
-    <div class="ms-40 min-h-full flex-col-center p-10">
-      <div v-if="active === 0">
-        请开发者自行扩展
-      </div>
+    <div class="w=[calc(100%-600px)] ms-40 min-h-full flex-col-center p-10">
+      <BaseInfo v-if="active === 0" />
       <EditPasswordForm v-if="active === 1" />
     </div>
   </div>

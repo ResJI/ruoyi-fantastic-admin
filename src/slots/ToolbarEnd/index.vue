@@ -2,7 +2,7 @@
 import useSettingsStore from '@/store/modules/settings'
 import useUserStore from '@/store/modules/user'
 import eventBus from '@/utils/eventBus'
-import Profile from './profile.vue'
+import Profile from './profile/Profile.vue'
 
 const router = useRouter()
 
@@ -55,7 +55,7 @@ const isProfileShow = ref(false)
       </template>
     </FaButton>
   </FaDropdown>
-  <FaModal v-model="isProfileShow" align-center :header="false" :footer="false" :close-on-click-overlay="false" :close-on-press-escape="false" class="h-500px min-w-600px overflow-hidden" content-class="min-h-full p-0 flex">
+  <FaModal v-model="isProfileShow" align-center :header="false" :footer="false" :close-on-click-overlay="false" :close-on-press-escape="false" class="h-500px min-w-800px overflow-hidden" content-class="min-h-full p-0 flex">
     <Profile />
   </FaModal>
 </template>
