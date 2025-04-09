@@ -1,5 +1,5 @@
-import request from '../index'
 import handleTree from '@/utils/ruoyi/handleTree'
+import request from '../index'
 
 function filterAuth(data) {
   for (let i = 0; i < data.children?.length; i++) {

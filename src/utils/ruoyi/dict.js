@@ -1,5 +1,5 @@
-import useDictStore from '@/store/ruoyi/dict'
 import { getDicts } from '@/api/ruoyi/dict/data'
+import useDictStore from '@/store/ruoyi/dict'
 
 /**
  * 获取字典数据
